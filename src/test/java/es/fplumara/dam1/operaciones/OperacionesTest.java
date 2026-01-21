@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OperacionesTest {
@@ -40,5 +42,35 @@ public class OperacionesTest {
         });
         assertEquals(resultadoEsperado, ex.getMessage());
     }
+
+    //TEST DE MEDIA
+
+    @ParameterizedTest
+    @MethodSource("mediaNormal")
+    @DisplayName("Comprueba las medias")
+    public void mediaTestNormal (double resultadoEsperado, double... notas){
+        assertEquals(resultadoEsperado, Operaciones.media(notas), 0.0001);
+    }
+    public static Stream<Arguments> mediaNormal() {
+        return Stream.of(
+                Arguments.of(6.0, new double[]{5.0, 7.0}),
+                Arguments.of(10.0, new double[]{10.0}),
+                Arguments.of(0.0, new double[]{0.0, 0.0, 0.0, 0.0})
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("mediaVacia")
+    @DisplayName("Comprueba medias vacías")
+    public void mediaTestVacia (double... notas){
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> Operaciones.media(notas));
+        assertEquals("No hay notas", ex.getMessage());
+    }
+    public static Stream<Arguments> mediaVacia(){
+        return Stream.of(
+                Arguments.of(new double[]{})
+        );
+    }
+
 
 }
