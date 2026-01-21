@@ -1,6 +1,7 @@
 package es.fplumara.dam1.operaciones;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -43,7 +44,7 @@ public class OperacionesTest {
         assertEquals(resultadoEsperado, ex.getMessage());
     }
 
-    //TEST DE MEDIA
+    //TESTS DE MEDIA
 
     @ParameterizedTest
     @MethodSource("mediaNormal")
@@ -59,18 +60,27 @@ public class OperacionesTest {
         );
     }
 
-    @ParameterizedTest
-    @MethodSource("mediaVacia")
-    @DisplayName("Comprueba medias vacías")
-    public void mediaTestVacia (double... notas){
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> Operaciones.media(notas));
-        assertEquals("No hay notas", ex.getMessage());
-    }
-    public static Stream<Arguments> mediaVacia(){
-        return Stream.of(
-                Arguments.of(new double[]{})
-        );
-    }
+    @Nested
+    class CasosInvalidos { //Esta clase engloba al test mediaTestNula y mediaTestVacia
+        @ParameterizedTest
+        @MethodSource("mediaNula")
+        @DisplayName("Comprueba medias vacías")
+        public void mediaTestNula(double... notas) {
+            IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> Operaciones.media(notas));
+            assertEquals("No hay notas", ex.getMessage());
+        }
 
+        public static Stream<Arguments> mediaNula() {
+            return Stream.of(
+                    Arguments.of(new double[]{}) // Array vacio
+            );
+        }
 
+        @Test
+        @DisplayName("Comprueba media sin notas")
+        public void mediaTestVacia() {
+            IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> Operaciones.media()); //No das notas
+            assertEquals("No hay notas", ex.getMessage());
+        }
+    }
 }
