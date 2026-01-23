@@ -14,6 +14,9 @@ public class CocheService {
      * 0000ZZZ
      **/
     public boolean validaMatricula(String matricula) {
+        if(matricula == null || matricula.isEmpty()){
+            return false;
+        }
         return matricula.matches("\\d{4}[A-Z]{3}");
     }
 

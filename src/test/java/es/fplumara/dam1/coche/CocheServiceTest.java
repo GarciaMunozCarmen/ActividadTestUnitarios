@@ -46,6 +46,10 @@ public class CocheServiceTest {
     public void isInvalidMatriculaTest(String matricula){
         assertFalse(cocheService.validaMatricula(matricula));
     }
+    @Test
+    public void nullMatriculaTest(){
+        assertFalse(cocheService.validaMatricula(null));
+    }
 
     @Nested
     class matriculasValidasTests{
